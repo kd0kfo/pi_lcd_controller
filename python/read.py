@@ -10,6 +10,15 @@ LED_ON = GPIO.LOW
 LEDS = {'green': 4, 'yellow': 5}
 BUTTONS = {0: 6}
 
+def btn_state(button):
+    return GPIO.input(BUTTONS[button])
+
+
+def btn_state_json():
+    import json
+    state = dict((int(button), btn_state(button)) for button in BUTTONS)
+    return json.dumps(state)
+
 
 def led_on(led):
     GPIO.output(LEDS[led], LED_ON)
@@ -36,15 +45,20 @@ for button in BUTTONS:
 # If run alone.
 if __name__ == "__main__":
     import signal
+    import socket
 
     def sighandler(signum, frame):
-	led_on('green')
-	led_on('yellow')
+        led_on('green')
+        led_on('yellow')
         print("Shutting down")
-	sleep(1)
-	led_off('green')
-	led_off('yellow')
-	exit(0)
+        sleep(1)
+        led_off('green')
+        led_off('yellow')
+        exit(0)
+
+    IP = '127.0.0.1'
+    PORT = 9191
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     signal.signal(signal.SIGTERM, sighandler)
     led_on('green')
@@ -54,6 +68,7 @@ if __name__ == "__main__":
     led_off('green')
     led_off('yellow')
     while True:
-        btn6 = GPIO.input(6)
-        led_state('green', btn6) 
+        btn0 = btn_state(0)
+        led_state('green', btn0) 
+        sock.sendto(btn_state_json(), (IP, PORT))
         sleep(0.5)
