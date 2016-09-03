@@ -8,7 +8,7 @@ LED_OFF = GPIO.HIGH
 LED_ON = GPIO.LOW
 
 LEDS = {'green': 4, 'yellow': 5}
-BUTTONS = {0: 6}
+BUTTONS = {0: 6, 1: 12, 2: 13}
 
 def btn_state(button):
     return GPIO.input(BUTTONS[button])
@@ -68,7 +68,9 @@ if __name__ == "__main__":
     led_off('green')
     led_off('yellow')
     while True:
-        btn0 = btn_state(0)
-        led_state('green', btn0) 
+        led_state('green', 0)
+        for btn in BUTTONS:
+            if btn_state(btn):
+	            led_on('green')
         sock.sendto(btn_state_json(), (IP, PORT))
         sleep(0.5)
