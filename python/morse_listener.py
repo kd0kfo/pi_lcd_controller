@@ -3,10 +3,7 @@
 from sys import argv
 import morse
 import button_listener
-
-BTN_FUNCT = '0'
-BTN_DIT = '1'
-BTN_DAH = '2'
+from lcdconfig import BTN_FUNCT, BTN_DIT, BTN_DAH
 
 out = open(argv[1], "w")
 mcode = morse.MorseEncoder()
@@ -24,7 +21,7 @@ def morse_encode(button):
         mcode.add_dit()
     elif button == BTN_DAH:
         mcode.add_dah()
-
+    return True
 
 service = button_listener.ButtonListener(morse_encode)
 service.listen()
