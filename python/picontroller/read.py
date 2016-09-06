@@ -3,6 +3,7 @@
 from sys import stderr, argv
 import RPi.GPIO as GPIO
 from time import sleep
+from picontroller import ioinit
 
 LED_OFF = GPIO.HIGH
 LED_ON = GPIO.LOW
@@ -35,7 +36,7 @@ def led_state(led, state):
         led_off(led)
 
 # IO Setup
-GPIO.setmode(GPIO.BCM)
+ioinit()
 for led in LEDS:
     GPIO.setup(LEDS[led], GPIO.OUT)
     led_off(led)

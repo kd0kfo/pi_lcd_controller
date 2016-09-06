@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+#
+# LCD Driver
+#
+# TODO: refactor ugly functions with gross globals to class.
 
 from sys import stderr, argv
 from RPLCD import CharLCD
@@ -26,6 +30,7 @@ lcd.create_char(0, smiley)
 
 
 def clear_screen():
+    global lcdbuffer
     lcd.clear()
     lcdbuffer = u""
 
