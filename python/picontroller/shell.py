@@ -91,10 +91,16 @@ def exit_shell():
 def echo(msg):
     shell.output(msg)
 
+
+DEFAULT_COMMANDS = {'test': lambda: "Works!",
+    'exit': exit_shell,
+    'echo': echo,
+    'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
+}
+
 if __name__ == "__main__":
-    from time import sleep
+    from time import sleep, localtime, strftime
 
     shell = Shell(debug=True)
 
-    commands = {'test': lambda: "Works!", 'exit': exit_shell, 'echo': echo}
-    shell.run(commands)
+    shell.run(DEFAULT_COMMANDS)
