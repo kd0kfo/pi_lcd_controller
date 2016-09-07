@@ -18,8 +18,11 @@ class Shell():
         write_text(msg)
 
     def morse_word_reader(self, button):
-        from lcdconfig import BTN_FUNCT, BTN_DIT, BTN_DAH
-        if button == BTN_FUNCT:
+        from lcdconfig import BTN_FUNCT, BTN_DIT, BTN_DAH, BTN_RTN
+        if button == BTN_RTN:
+            self.word_buffer += '\n'
+            return False
+        elif button == BTN_FUNCT:
             self.word_buffer += self.mcode.char()
             self.mcode.reset()
             if self.word_buffer[-1] == '\n':
@@ -42,7 +45,7 @@ class Shell():
         if self.debug:
             print("Running with commands: %s" % ", ".join("'%s'" % key for key in commands.keys()))
         while True:
-            self.output("> ")
+            self.output(">")
             try:
                 line = self.readline().split()
                 (command, args) = line[0], line[1:]
