@@ -9,7 +9,7 @@ LED_OFF = GPIO.HIGH
 LED_ON = GPIO.LOW
 
 LEDS = {'green': 4, 'yellow': 5}
-BUTTONS = {0: 6, 1: 12, 2: 13, 3: 16}
+BUTTONS = {0: 6, 1: 12, 2: 13, 3: 16, 4: 17}
 
 def btn_state(button):
     return GPIO.input(BUTTONS[button])

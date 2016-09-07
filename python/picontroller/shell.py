@@ -8,7 +8,8 @@ from button_listener import ButtonListener
 BTN_FUNCT = '0'
 BTN_DIT = '1'
 BTN_DAH = '2'
-BTN_RTN = '3'
+BTN_SPACE = '3'
+BTN_RTN = '4'
 
 
 class Shell():
@@ -36,6 +37,9 @@ class Shell():
             self.mcode.add_dit()
         elif button == BTN_DAH:
             self.mcode.add_dah()
+        elif button == BTN_SPACE:
+            self.word_buffer += ' '
+            self.output(self.word_buffer[-1])
         return True
 
     def readline(self):
