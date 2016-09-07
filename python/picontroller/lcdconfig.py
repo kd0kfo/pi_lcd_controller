@@ -1,4 +1,0 @@
-BTN_FUNCT = '0'
-BTN_DIT = '1'
-BTN_DAH = '2'
-BTN_RTN = '3'

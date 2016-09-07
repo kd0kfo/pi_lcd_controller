@@ -5,6 +5,11 @@ from morse import MorseEncoder
 from write import write_text, clear_screen
 from button_listener import ButtonListener
 
+BTN_FUNCT = '0'
+BTN_DIT = '1'
+BTN_DAH = '2'
+BTN_RTN = '3'
+
 
 class Shell():
     def __init__(self, debug=False):
@@ -18,7 +23,6 @@ class Shell():
         write_text(msg)
 
     def morse_word_reader(self, button):
-        from lcdconfig import BTN_FUNCT, BTN_DIT, BTN_DAH, BTN_RTN
         if button == BTN_RTN:
             self.word_buffer += '\n'
             return False
