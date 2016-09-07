@@ -67,7 +67,12 @@ class Shell():
             # TODO: fill in with commands
             clear_screen()
             if command in commands:
-                response = commands[command](*args)  
+                try:
+                    response = commands[command](*args)  
+                except Exception as e:
+                    response = "ERROR!"
+                    stdout.write(repr(e))
+                    stdout.write("\n")
                 if response:
                     self.output(response)
             else:
@@ -82,10 +87,14 @@ def exit_shell():
     write_text("Bye!")
     exit(0)
 
+
+def echo(msg):
+    shell.output(msg)
+
 if __name__ == "__main__":
     from time import sleep
 
     shell = Shell(debug=True)
 
-    commands = {'test': lambda: "Works!", 'exit': exit_shell}
+    commands = {'test': lambda: "Works!", 'exit': exit_shell, 'echo': echo}
     shell.run(commands)
