@@ -1,10 +1,15 @@
 /**
  *
- * This is a basic character stream driver. It can read in characters and then return
- * them. Has a fixed size buffer that acts like a small queue.
+ * This is a driver for buttons on the Raspberry Pi. It will accept via write a byte that is
+ * a bitmask for buttons being pressed (1) or not (0). When read, the driver will
+ * return a byte per button, equal to 1 if the button is down or 0 if it is not.
+ *
+ * If fewer than the number of buttons is attempted to be read, the output will be truncated
+ * to the number of buttons available. If more than one byte is written to the driver,
+ * only the last byte is used, because it is assumed that is the newest state.
  * 
- * For user access add the following to a /etc/udev/rules.d/99-basicdriver.rules file:
- * KERNEL=="basicdriver", SUBSYSTEM=="basicdriver_class", MODE="0666"
+ * For user access add the following to a /etc/udev/rules.d/99-buttons.rules file:
+ * KERNEL=="buttons", SUBSYSTEM=="buttons_class", MODE="0666"
  *
  */
 #include <linux/init.h>
