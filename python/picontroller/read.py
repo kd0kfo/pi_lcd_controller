@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sys import stderr, argv
+from sys import stderr
 import RPi.GPIO as GPIO
 from time import sleep
 from picontroller import ioinit
@@ -20,6 +20,13 @@ def btn_state_json():
     state = dict((int(button), btn_state(button)) for button in BUTTONS)
     return json.dumps(state)
 
+
+def encoded_state():
+    state = 0
+    for button in BUTTONS:
+        if btn_state(button):
+            state |= 1 << button
+    return state
 
 def led_on(led):
     GPIO.output(LEDS[led], LED_ON)
@@ -46,7 +53,10 @@ for button in BUTTONS:
 # If run alone.
 if __name__ == "__main__":
     import signal
-    import socket
+    from sys import argv
+    
+    driver = open(argv[1], "w")
+
 
     def sighandler(signum, frame):
         led_on('green')
@@ -55,13 +65,9 @@ if __name__ == "__main__":
         sleep(1)
         led_off('green')
         led_off('yellow')
+        driver.close()
         exit(0)
 
-    IP = '127.0.0.1'
-    PORT = 9191
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-    signal.signal(signal.SIGTERM, sighandler)
     led_on('green')
     sleep(1)
     led_on('yellow')
@@ -73,5 +79,6 @@ if __name__ == "__main__":
         for btn in BUTTONS:
             if btn_state(btn):
 	            led_on('green')
-        sock.sendto(btn_state_json(), (IP, PORT))
+        driver.write(encoded_state())
+        driver.flush() # need for python to do the write immediately
         sleep(0.5)
