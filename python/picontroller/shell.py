@@ -5,11 +5,11 @@ from morse import MorseEncoder
 from write import write_text, clear_screen
 from button_listener import ButtonListener
 
-BTN_FUNCT = '0'
-BTN_DIT = '1'
-BTN_DAH = '2'
-BTN_SPACE = '3'
-BTN_RTN = '4'
+BTN_FUNCT = 0
+BTN_DIT = 1
+BTN_DAH = 2
+BTN_SPACE = 3
+BTN_RTN = 4
 
 
 class Shell():

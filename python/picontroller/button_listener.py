@@ -21,7 +21,6 @@ class ButtonListener():
         while True:
             raw_state = [ord(ch) for ch in self.button_device.read(self.num_buttons)]
             state = dict(zip(range(0, len(raw_state)), raw_state))
-            print(state)
             for (button, isup) in state.iteritems():
                 if isup:
                     state[button] = 1
