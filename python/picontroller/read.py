@@ -79,6 +79,6 @@ if __name__ == "__main__":
         for btn in BUTTONS:
             if btn_state(btn):
 	            led_on('green')
-        driver.write(encoded_state())
+        driver.write(chr(encoded_state()))
         driver.flush() # need for python to do the write immediately
         sleep(0.5)
