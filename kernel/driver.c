@@ -48,7 +48,7 @@ static ssize_t bd_read(struct file *fp, char *buffer, size_t len, loff_t *offset
 	ssize_t readlen = (len > BUFFER_SIZE) ? BUFFER_SIZE : len;
 	memcpy(buffer, the_buffer, readlen);
 
-	printk(KERN_INFO "Read %lu bytes\n", readlen);
+	printk(KERN_INFO "Read %d bytes\n", readlen);
 	return readlen;
 }
 
