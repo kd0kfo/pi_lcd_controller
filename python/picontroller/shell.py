@@ -88,9 +88,9 @@ def exit_shell():
     exit(0)
 
 
-def echo(msg=None):
+def echo(*msg):
     if msg:
-        shell.output(msg)
+        shell.output(" ".join(msg))
 
 def demo_morse():
     from time import sleep
