@@ -7,6 +7,7 @@ from picontroller import ioinit
 
 LED_OFF = GPIO.HIGH
 LED_ON = GPIO.LOW
+BUTTON_POLL_PERIOD = 0.5
 
 LEDS = {'green': 4, 'yellow': 5}
 BUTTONS = {0: 6, 1: 12, 2: 13, 3: 16, 4: 17}
@@ -81,4 +82,4 @@ if __name__ == "__main__":
 	            led_on('green')
         driver.write(chr(encoded_state()))
         driver.flush() # need for python to do the write immediately
-        sleep(0.5)
+        sleep(0.1)

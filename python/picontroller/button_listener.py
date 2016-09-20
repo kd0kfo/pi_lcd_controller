@@ -30,7 +30,7 @@ class ButtonListener():
                     if not self.button_callback(button):
                         return
             self.last_state = state
-            sleep(0.5)
+            sleep(0.2)
 
 
 if __name__ == "__main__":
