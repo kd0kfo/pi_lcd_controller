@@ -109,7 +109,7 @@ def ls(path="."):
     shell.output(" ".join(listdir(path)))
 
 
-def help(*args):
+def help_command(*args):
     shell.output("Commands are %s" % " ".join(shell.commands.keys()))
 
 
@@ -118,7 +118,7 @@ DEFAULT_COMMANDS = {'test': lambda: "Works!",
     'demo': demo_morse,
     'exit': exit_shell,
     'echo': echo,
-    'help': help,
+    'help': help_command,
     'ls': ls,
     'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
 }
