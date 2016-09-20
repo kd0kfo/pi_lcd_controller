@@ -17,6 +17,7 @@ class Shell():
         self.debug = debug
         self.word_buffer = ""
         self.mcode = MorseEncoder()
+        self.commands = {}
 
     def output(self, msg):
         if self.debug:
@@ -50,6 +51,7 @@ class Shell():
         return self.word_buffer
 
     def run(self, commands):
+        self.commands = commands
         if self.debug:
             print("Running with commands: %s" % ", ".join("'%s'" % key for key in commands.keys()))
         while True:
@@ -107,12 +109,18 @@ def ls(path="."):
     shell.output(" ".join(listdir(path)))
 
 
+def help(*args):
+    shell.output("Commands are %s" % " ".join(shell.commands.keys()))
+
+
 DEFAULT_COMMANDS = {'test': lambda: "Works!",
     'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
     'demo': demo_morse,
     'exit': exit_shell,
     'echo': echo,
+    'help': help,
     'ls': ls,
+    'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
 }
 
 if __name__ == "__main__":
