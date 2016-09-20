@@ -113,7 +113,7 @@ def char_to_morse(ch):
 	raise UnencodableCharacter(ch)
 
 def word_to_morse(word):
-	return (char_to_morse(ord(ch)) for ch in word)
+	return tuple(char_to_morse(ord(ch)) for ch in word)
 
 
 def morse_to_ditdat(morse):
