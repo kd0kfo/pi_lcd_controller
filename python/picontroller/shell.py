@@ -88,14 +88,31 @@ def exit_shell():
     exit(0)
 
 
-def echo(msg):
-    shell.output(msg)
+def echo(*msg):
+    if msg:
+        shell.output(" ".join(msg))
+
+def demo_morse():
+    from time import sleep
+    from morse import morse_to_ditdat, char_to_morse
+    for ch in range(ord('a'), ord('z')+1) + range(ord('0'), ord('9')+1):
+        clear_screen()
+        curr = chr(ch)
+        shell.output("%s\n%s" % (curr, morse_to_ditdat(char_to_morse(ch))))
+        sleep(1)
+
+
+def ls(path="."):
+    from os import listdir
+    shell.output(" ".join(listdir(path)))
 
 
 DEFAULT_COMMANDS = {'test': lambda: "Works!",
+    'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
+    'demo': demo_morse,
     'exit': exit_shell,
     'echo': echo,
-    'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
+    'ls': ls,
 }
 
 if __name__ == "__main__":

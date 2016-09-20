@@ -67,6 +67,7 @@ ENCODING = { 0b01000010: 'a',
     0b00101101: '\x00',
     0b00100101: '\x0C',
     0b10101101: '\n',
+    0b11011101: '/',
 }
 
 
@@ -112,7 +113,7 @@ def char_to_morse(ch):
 	raise UnencodableCharacter(ch)
 
 def word_to_morse(word):
-	return (char_to_morse(ord(ch)) for ch in word)
+	return tuple(char_to_morse(ord(ch)) for ch in word)
 
 
 def morse_to_ditdat(morse):
