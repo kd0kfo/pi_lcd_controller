@@ -23,6 +23,13 @@ class InvalidEncoding(Exception):
 		return "0x%x" % self.encoding
 
 
+BTN_FUNCT = 0
+BTN_DIT = 1
+BTN_DAH = 2
+BTN_SPACE = 3
+BTN_RTN = 4
+
+
 LENGTH_MASK = 7
 MAX_ENCODED_LENGTH = 5 # Only 5 characters allowed
 MORSE_MSB = 0x80
@@ -104,6 +111,59 @@ class MorseEncoder():
 		
 		return ENCODING[self.morse]
 		
+
+class MorseFile():
+	def __init__(self, read_callback=None):
+		self.mcode = MorseEncoder()
+		self.word_buffer = ""
+		self.read_callback = read_callback
+
+	def morse_word_reader(self, button):
+		if button == BTN_FUNCT:
+			self.word_buffer += self.mcode.char()
+			self.mcode.reset()
+			return False
+		elif button == BTN_DIT:
+		    self.mcode.add_dit()
+		elif button == BTN_DAH:
+		    self.mcode.add_dah()
+		elif button == BTN_RTN:
+		    self.word_buffer += '\n'
+		    return False
+		elif button == BTN_SPACE:
+		    self.word_buffer += ' '
+		    return False
+		return True
+
+	def read(self, nbytes):
+		"""
+		nbytes is required number of bytes to be read. Required, because
+		EOF doesn't make sense for this device.
+		"""
+		from button_listener import ButtonListener
+		while len(self.word_buffer) < nbytes:
+			service = ButtonListener(self.morse_word_reader)
+			service.listen() # this is a blocking call
+		retval = self.word_buffer[:nbytes]
+		self.word_buffer = self.word_buffer[nbytes:]
+		if self.read_callback:
+			self.read_callback(retval)
+		return retval
+
+	def readline(self):
+		retval = ""
+		readchar = ""
+		while readchar != "\n":
+		    retval += readchar
+		    readchar = self.read(1)
+		return retval
+
+	def close(self):
+		self.flush()
+
+   	def flush(self):
+		self.word_buffer = ""
+		self.mcode = None
 
 
 def char_to_morse(ch):
