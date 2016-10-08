@@ -70,6 +70,15 @@ def demo_morse():
         sleep(1)
 
 
+def number_demo():
+    from number_listener import NumberListener
+    shell.output("Enter number: ")
+    numbers = NumberListener()
+    numbers.listen()
+    val = numbers.get_int()
+    shell.output("%s" % val)
+
+
 def ls(path="."):
     from os import listdir
     shell.output(" ".join(listdir(path)))
@@ -85,6 +94,7 @@ DEFAULT_COMMANDS = {'test': lambda: "Works!",
     'exit': exit_shell,
     'echo': echo,
     'help': help_command,
+    'int': number_demo,
     'ls': ls,
     'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
 }
