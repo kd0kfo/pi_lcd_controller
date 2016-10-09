@@ -11,7 +11,7 @@ class ButtonListener():
     Callback function should return a boolean to show whether 
     or not the listening should continue.
     """
-    def __init__(self, button_callback, device_filename="/dev/buttons", num_buttons=8):
+    def __init__(self, button_callback, device_filename="/dev/buttons", num_buttons=8, *args, **kw):
         self.button_callback = button_callback
         self.button_device = open(device_filename, "r")
         self.num_buttons = num_buttons

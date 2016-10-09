@@ -17,6 +17,9 @@ class NumberListener(button_listener.ButtonListener):
 		button_listener.ButtonListener.__init__(self, *args, **kw)
 		self.shift_pressed = False
 		self.number_string = ""
+		self.read_callback = None
+		if "read_callback" in kw:
+			self.read_callback = kw["read_callback"]
 
 	def get_int(self):
 		if not self.number_string.isdigit():
@@ -36,11 +39,14 @@ class NumberListener(button_listener.ButtonListener):
 			currval = (5 + currval) % 10
 		self.shift_pressed = False
 		self.number_string += "%d" % currval
+		if self.read_callback:
+			self.read_callback(self.number_string[-1])
 		return True
 
 
 
 if __name__ == "__main__":
-	listener = NumberListener()
+	from sys import stdout
+	listener = NumberListener(read_callback=stdout.write)
 	listener.listen()
-	print(listener.get_int())
+	print("\nYou typed %d" % listener.get_int())
