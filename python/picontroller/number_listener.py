@@ -26,7 +26,6 @@ class NumberListener(button_listener.ButtonListener):
 			raise InvalidNumber(self.number_string())
 		return int(self.number_string)
 
-
 	def number_callback(self, button):
 		if button == BUTTON_SHIFT:
 			if self.shift_pressed:

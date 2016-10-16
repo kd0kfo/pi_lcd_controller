@@ -9,23 +9,39 @@ from button_listener import ButtonListener
 class Shell():
     def __init__(self, debug=False):
         self.debug = debug
-        self.mfile = MorseFile(read_callback=self.output)
         self.commands = {}
+        self.prompt = "> "
+        self.use_morse()
+
+    def use_morse(self):
+        self.infile = MorseFile(read_callback=self.output)
+        self.prompt = "> "
+
+    def use_keys(self):
+        from sys import stdin
+        self.infile = stdin
+        self.prompt = "? "
 
     def output(self, msg):
         if self.debug:
             stdout.write(msg)
         write_text(msg)
 
+    def clear(self):
+        clear_screen()
+
+    def readline(self):
+        return self.infile.readline().strip()
     
     def run(self, commands):
+        from time import sleep
         self.commands = commands
         if self.debug:
             print("Running with commands: %s" % ", ".join("'%s'" % key for key in commands.keys()))
         while True:
-            self.output("> ")
+            self.output(self.prompt)
             try:
-                line = self.mfile.readline().split()
+                line = self.readline().split()
                 (command, args) = line[0], line[1:]
             except Exception as e:
                 stdout.write("Error:\n")
@@ -36,11 +52,10 @@ class Shell():
             clear_screen()
             if command in commands:
                 try:
-                    response = commands[command](*args)  
+                    response = commands[command](self, *args)  
                 except Exception as e:
                     response = "ERROR!"
-                    stdout.write(repr(e))
-                    stdout.write("\n")
+                    stdout.write("%s\n" % e)
                 if response:
                     self.output(response)
             else:
@@ -50,53 +65,58 @@ class Shell():
             stdout.write("\n")
 
 
-def exit_shell():
-    clear_screen()
-    write_text("Bye!")
+def exit_shell(theshell):
+    theshell.clear()
+    theshell.output("Bye!")
     exit(0)
 
 
-def echo(*msg):
+def echo(theshell, *msg):
     if msg:
-        shell.output(" ".join(msg))
+        theshell.output(" ".join(msg))
 
-def demo_morse():
+def demo_morse(theshell):
     from time import sleep
     from morse import morse_to_ditdat, char_to_morse
     for ch in range(ord('a'), ord('z')+1) + range(ord('0'), ord('9')+1):
-        clear_screen()
+        theshell.clear()
         curr = chr(ch)
-        shell.output("%s\n%s" % (curr, morse_to_ditdat(char_to_morse(ch))))
+        theshell.output("%s\n%s" % (curr, morse_to_ditdat(char_to_morse(ch))))
         sleep(1)
 
 
-def number_demo():
+def number_demo(theshell):
     from number_listener import NumberListener
-    shell.output("Enter number: ")
-    numbers = NumberListener()
+    from sys import stdout
+    theshell.output("Enter number: ")
+    numbers = NumberListener(read_callback=stdout.write)
     numbers.listen()
     val = numbers.get_int()
-    shell.output("%s" % val)
+    clear_screen()
+    theshell.output("You entered %s" % val)
 
 
-def ls(path="."):
+def ls(theshell, path="."):
     from os import listdir
-    shell.output(" ".join(listdir(path)))
+    theshell.output(" ".join(listdir(path)))
 
 
-def help_command(*args):
-    shell.output("Commands are %s" % " ".join(shell.commands.keys()))
+def help_command(theshell, *args):
+    theshell.output("Commands are %s" % " ".join(theshell.commands.keys()))
 
 
-DEFAULT_COMMANDS = {'test': lambda: "Works!",
-    'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
+def show_date(theshell, *args):
+    from time import strftime, localtime
+    return strftime("%m/%d/%y%H:%M:%S", localtime())
+
+DEFAULT_COMMANDS = {'test': lambda theshell: "Works!",
+    'date': show_date,
     'demo': demo_morse,
     'exit': exit_shell,
     'echo': echo,
     'help': help_command,
     'int': number_demo,
     'ls': ls,
-    'date': lambda:strftime("%m/%d/%y%H:%M:%S", localtime()),
 }
 
 if __name__ == "__main__":
