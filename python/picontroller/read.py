@@ -10,7 +10,7 @@ LED_ON = GPIO.LOW
 BUTTON_POLL_PERIOD = 0.5
 
 LEDS = {'green': 4, 'yellow': 5}
-BUTTONS = {0: 6, 1: 12, 2: 13, 3: 16, 4: 17}
+BUTTONS = {0: 6, 1: 12, 2: 13, 3: 16, 4: 17, 5: 18}
 
 def btn_state(button):
     return GPIO.input(BUTTONS[button])
