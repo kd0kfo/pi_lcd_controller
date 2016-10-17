@@ -89,7 +89,7 @@ def number_demo(theshell):
     from number_listener import NumberListener
     from sys import stdout
     theshell.output("Enter number: ")
-    numbers = NumberListener(read_callback=stdout.write)
+    numbers = NumberListener(read_callback=theshell.output)
     numbers.listen()
     val = numbers.get_int()
     clear_screen()
