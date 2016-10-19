@@ -22,6 +22,20 @@ class Shell():
         self.infile = stdin
         self.prompt = "? "
 
+    def get_int(self):
+        from sys import stdin
+        from number_listener import NumberListener
+        retval = None
+        if self.infile == stdin:
+            line = self.readline()
+            retval = int(line.strip())
+        else:
+            numbers = NumberListener(read_callback=self.output)
+            numbers.listen()
+            retval = numbers.get_int()
+
+        return retval
+
     def output(self, msg):
         if self.debug:
             stdout.write(msg)
@@ -86,12 +100,9 @@ def demo_morse(theshell):
 
 
 def number_demo(theshell):
-    from number_listener import NumberListener
     from sys import stdout
     theshell.output("Enter number: ")
-    numbers = NumberListener(read_callback=theshell.output)
-    numbers.listen()
-    val = numbers.get_int()
+    val = theshell.get_int()
     clear_screen()
     theshell.output("You entered %s" % val)
 
