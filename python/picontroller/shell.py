@@ -57,7 +57,6 @@ class Shell():
             try:
                 line = self.readline().split()
                 if not line:
-                    print("Skipping %s" % line)
                     continue
                 (command, args) = line[0], line[1:]
             except Exception as e:
