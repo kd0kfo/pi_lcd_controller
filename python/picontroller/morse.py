@@ -28,6 +28,7 @@ BTN_DIT = 1
 BTN_DAH = 2
 BTN_SPACE = 3
 BTN_RTN = 4
+BTN_BACKSPACE = 5
 
 
 LENGTH_MASK = 7
@@ -127,6 +128,9 @@ class MorseFile():
 		    self.mcode.add_dit()
 		elif button == BTN_DAH:
 		    self.mcode.add_dah()
+		elif button == BTN_BACKSPACE:
+			self.word_buffer += "\x08"
+			return False
 		elif button == BTN_RTN:
 		    self.word_buffer += '\n'
 		    return False
@@ -154,8 +158,11 @@ class MorseFile():
 		retval = ""
 		readchar = ""
 		while readchar != "\n":
-		    retval += readchar
-		    readchar = self.read(1)
+			if readchar == "\x08":
+				retval = retval[:-2]
+			else:
+				retval += readchar
+			readchar = self.read(1)
 		return retval
 
 	def close(self):
